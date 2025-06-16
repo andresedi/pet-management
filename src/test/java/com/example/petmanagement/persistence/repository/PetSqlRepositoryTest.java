@@ -1,8 +1,6 @@
 package com.example.petmanagement.persistence.repository;
 
 import com.example.petmanagement.persistence.model.Pet;
-import com.example.petmanagement.persistence.repository.PetJpaRepository;
-import com.example.petmanagement.persistence.repository.PetSqlRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
