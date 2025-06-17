@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.Instant;
 import java.util.List;
 
 @ControllerAdvice
@@ -30,7 +29,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .messages(List.of("Database operation failed"))
                 .reason(HttpStatus.CONFLICT.getReasonPhrase())
-                .timestamp(LocalDateTime.now(ZoneOffset.UTC))
+                .timestamp(Instant.now())
                 .build();
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
@@ -41,7 +40,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .messages(List.of("Invalid request format"))
                 .reason(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .timestamp(LocalDateTime.now(ZoneOffset.UTC))
+                .timestamp(Instant.now())
                 .build();
         return ResponseEntity.badRequest().body(errorResponse);
     }
@@ -52,7 +51,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .messages(List.of("HTTP method '" + ex.getMethod() + "' is not supported for this request"))
                 .reason(HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase())
-                .timestamp(LocalDateTime.now(ZoneOffset.UTC))
+                .timestamp(Instant.now())
                 .build();
 
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(errorResponse);
@@ -64,7 +63,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .messages(List.of("The requested resource does not exist"))
                 .reason(HttpStatus.NOT_FOUND.getReasonPhrase())
-                .timestamp(LocalDateTime.now(ZoneOffset.UTC))
+                .timestamp(Instant.now())
                 .build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
@@ -75,7 +74,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .messages(List.of("An unexpected error occurred. If the problem persists, contact support."))
                 .reason(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
-                .timestamp(LocalDateTime.now(ZoneOffset.UTC))
+                .timestamp(Instant.now())
                 .build();
         return ResponseEntity.internalServerError().body(errorResponse);
     }
@@ -86,7 +85,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .messages(List.of("An unexpected error occurred. If the problem persists, contact support."))
                 .reason(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
-                .timestamp(LocalDateTime.now(ZoneOffset.UTC))
+                .timestamp(Instant.now())
                 .build();
         return ResponseEntity.internalServerError().body(errorResponse);
     }

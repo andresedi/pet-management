@@ -11,8 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class ValidationExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .messages(errors)
                 .reason(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .timestamp(LocalDateTime.now(ZoneOffset.UTC))
+                .timestamp(Instant.now())
                 .build();
         return ResponseEntity.badRequest().body(errorResponse);
     }
@@ -44,7 +43,7 @@ public class ValidationExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .messages(errors)
                 .reason(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .timestamp(LocalDateTime.now(ZoneOffset.UTC))
+                .timestamp(Instant.now())
                 .build();
         return ResponseEntity.badRequest().body(errorResponse);
     }

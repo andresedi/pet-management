@@ -9,8 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.Instant;
 import java.util.List;
 
 
@@ -24,7 +23,7 @@ public class PetExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .messages(List.of(ex.getMessage()))
                 .reason(HttpStatus.NOT_FOUND.getReasonPhrase())
-                .timestamp(LocalDateTime.now(ZoneOffset.UTC))
+                .timestamp(Instant.now())
                 .build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
