@@ -1,5 +1,6 @@
 package com.example.petmanagement.service;
 
+import com.example.petmanagement.CacheConfiguration;
 import com.example.petmanagement.dto.PaginatedResponse;
 import com.example.petmanagement.dto.PetRequest;
 import com.example.petmanagement.dto.PetResponse;
@@ -52,7 +53,7 @@ public class PetServiceImpl implements PetService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = "pets", key = "#id")
+    @Cacheable(value = CacheConfiguration.PETS_CACHE_NAME, key = CacheConfiguration.PETS_CACHE_ID_KEY)
     public PetResponse getPetById(String id) {
         log.debug("Finding pet by id: {}", id);
         Long petId = PetIdentifierConverter.of(id).asLong();
@@ -70,6 +71,7 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
+    @CacheEvict(value = CacheConfiguration.PETS_CACHE_NAME, key = CacheConfiguration.PETS_CACHE_ID_KEY)
     public PetResponse updatePet(String id, PetRequest petRequest) {
         log.info("Updating pet with id: {}", id);
         Long petId = PetIdentifierConverter.of(id).asLong();
@@ -85,7 +87,7 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    @CacheEvict(value = "pets", key = "#id")
+    @CacheEvict(value = CacheConfiguration.PETS_CACHE_NAME, key = CacheConfiguration.PETS_CACHE_ID_KEY)
     public void deletePet(String id) {
         log.info("Deleting pet with id: {}", id);
         Long petId = PetIdentifierConverter.of(id).asLong();

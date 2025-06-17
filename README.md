@@ -18,9 +18,11 @@ A RESTful API service for managing pets, built with Spring Boot.
 - Input validation
 - Custom field trimming annotation
 - Comprehensive error handling with ControllerAdvice
+- Caching with Caffeine
 - Environment-specific configurations
 - Logging with Log4j2 and custom log format with correlation ID
 - API documentation with OpenAPI at /swagger-ui.html
+- Easier the transition to NoSql database
 
 ## Getting Started
 
