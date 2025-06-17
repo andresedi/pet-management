@@ -6,6 +6,8 @@ import com.example.petmanagement.dto.PetRequest;
 import com.example.petmanagement.dto.PetResponse;
 import com.example.petmanagement.service.PetService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,9 +38,9 @@ public class PetController {
     @Operation(description = "Get pets with pagination and sorting")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Successfully retrieved pets"),
-        @ApiResponse(responseCode = "400", description = "Invalid request parameters"),
-        @ApiResponse(responseCode = "405", description = "Method not allowed"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "405", description = "Method not allowed", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     public ResponseEntity<PaginatedResponse<PetResponse>> getAllPets(@Valid @ModelAttribute PetPageRequest params) {
         log.debug("Receiving request to get all pets with page: {}, size: {}, sortBy: {}, direction: {}", params.getPage(),
@@ -57,9 +59,9 @@ public class PetController {
     @Operation(description = "Get pet with specified id")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Successfully retrieved pet"),
-        @ApiResponse(responseCode = "404", description = "Pet not found"),
-        @ApiResponse(responseCode = "405", description = "Method not allowed"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "404", description = "Pet not found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "405", description = "Method not allowed", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     public ResponseEntity<PetResponse> getPetById(@PathVariable Long id) {
         log.debug("Receiving request to get pet by id: {}", id);
@@ -72,10 +74,10 @@ public class PetController {
     @Operation(description = "Create pet with specified details")
     @ApiResponses({
         @ApiResponse(responseCode = "201", description = "Successfully created pet"),
-        @ApiResponse(responseCode = "400", description = "Invalid request body"),
-        @ApiResponse(responseCode = "405", description = "Method not allowed"),
-        @ApiResponse(responseCode = "409", description = "Database operation failed"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "400", description = "Invalid request body", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "405", description = "Method not allowed", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "409", description = "Database operation failed", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     public ResponseEntity<PetResponse> createPet(@RequestBody @Valid PetRequest petRequest) {
         log.debug("Receiving request to create new pet: {}", petRequest);
@@ -88,11 +90,11 @@ public class PetController {
     @Operation(description = "Update pet with specified id and details")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Successfully updated pet"),
-        @ApiResponse(responseCode = "400", description = "Invalid request body"),
-        @ApiResponse(responseCode = "404", description = "Pet not found"),
-        @ApiResponse(responseCode = "405", description = "Method not allowed"),
-        @ApiResponse(responseCode = "409", description = "Database operation failed"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "400", description = "Invalid request body", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "404", description = "Pet not found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "405", description = "Method not allowed", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "409", description = "Database operation failed", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     public ResponseEntity<PetResponse> updatePet(@PathVariable Long id, @RequestBody @Valid PetRequest petRequest) {
         log.debug("Receiving request to update pet with id: {}, details: {}", id, petRequest);
@@ -105,9 +107,9 @@ public class PetController {
     @Operation(description = "Delete pet with specified id")
     @ApiResponses({
         @ApiResponse(responseCode = "204", description = "Successfully deleted pet"),
-        @ApiResponse(responseCode = "404", description = "Pet not found"),
-        @ApiResponse(responseCode = "405", description = "Method not allowed"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "404", description = "Pet not found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "405", description = "Method not allowed", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     public ResponseEntity<Void> deletePet(@PathVariable Long id) {
         log.debug("Receiving request to delete pet with id: {}", id);
