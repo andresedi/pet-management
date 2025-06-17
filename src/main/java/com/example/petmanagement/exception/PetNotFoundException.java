@@ -1,7 +1,7 @@
 package com.example.petmanagement.exception;
 
 public class PetNotFoundException extends RuntimeException {
-    public PetNotFoundException(Long petId) {
-        super(String.format("Pet not found with id: %d ", petId));
+    public PetNotFoundException(String petId) {
+        super(String.format("Pet not found with id: %s ", petId));
     }
 }

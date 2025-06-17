@@ -3,6 +3,7 @@ package com.example.petmanagement.controller;
 import com.example.petmanagement.dto.PaginatedResponse;
 import com.example.petmanagement.dto.PetRequest;
 import com.example.petmanagement.dto.PetResponse;
+import com.example.petmanagement.exception.InvalidPetIdException;
 import com.example.petmanagement.exception.PetExceptionHandler;
 import com.example.petmanagement.exception.PetNotFoundException;
 import com.example.petmanagement.service.PetService;
@@ -19,8 +20,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -52,7 +52,7 @@ class PetControllerTest {
                 .build();
 
         petResponse = PetResponse.builder()
-                .petId(1L)
+                .petId("1")
                 .name("Fluffy")
                 .species("Cat")
                 .age(3)
@@ -93,7 +93,7 @@ class PetControllerTest {
 
     @Test
     void getPetById_WhenPetExists_ShouldReturnOK() throws Exception {
-        when(petService.getPetById(1L)).thenReturn(petResponse);
+        when(petService.getPetById("1")).thenReturn(petResponse);
 
         mockMvc.perform(get("/api/pets/{petId}", 1L))
                 .andExpect(status().isOk())
@@ -106,10 +106,18 @@ class PetControllerTest {
 
     @Test
     void getPetById_WhenPetNotFound_ShouldReturnNotFound() throws Exception {
-        when(petService.getPetById(999L)).thenThrow(new PetNotFoundException(999L));
+        when(petService.getPetById("999")).thenThrow(new PetNotFoundException("999"));
 
-        mockMvc.perform(get("/api/pets/{petId}", 999L))
+        mockMvc.perform(get("/api/pets/{petId}", "999"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void getPetById_WhenInvalidPetId_ShouldReturnBadRequest() throws Exception {
+        when(petService.getPetById("not a number")).thenThrow(new InvalidPetIdException("not a number"));
+
+        mockMvc.perform(get("/api/pets/{petId}", "not a number"))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -130,7 +138,7 @@ class PetControllerTest {
 
     @Test
     void updatePet_ShouldReturnOK() throws Exception {
-        when(petService.updatePet(anyLong(), any(PetRequest.class))).thenReturn(petResponse);
+        when(petService.updatePet(anyString(), any(PetRequest.class))).thenReturn(petResponse);
 
         mockMvc.perform(put("/api/pets/{petId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -145,8 +153,8 @@ class PetControllerTest {
 
     @Test
     void updatePet_WhenPetNotFound_ShouldReturnNotFound() throws Exception {
-        when(petService.updatePet(anyLong(), any(PetRequest.class)))
-                .thenThrow(new PetNotFoundException(999L));
+        when(petService.updatePet(anyString(), any(PetRequest.class)))
+                .thenThrow(new PetNotFoundException("999"));
 
         mockMvc.perform(put("/api/pets/{petId}", 999L)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -156,7 +164,7 @@ class PetControllerTest {
 
     @Test
     void deletePet_ShouldReturn204() throws Exception {
-        doNothing().when(petService).deletePet(1L);
+        doNothing().when(petService).deletePet("1");
 
         mockMvc.perform(delete("/api/pets/1"))
                 .andExpect(status().isNoContent());

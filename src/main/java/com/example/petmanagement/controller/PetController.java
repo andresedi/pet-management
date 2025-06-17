@@ -1,9 +1,6 @@
 package com.example.petmanagement.controller;
 
-import com.example.petmanagement.dto.PaginatedResponse;
-import com.example.petmanagement.dto.PetPageRequest;
-import com.example.petmanagement.dto.PetRequest;
-import com.example.petmanagement.dto.PetResponse;
+import com.example.petmanagement.dto.*;
 import com.example.petmanagement.service.PetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -59,11 +56,12 @@ public class PetController {
     @Operation(description = "Get pet with specified id")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Successfully retrieved pet"),
+        @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "404", description = "Pet not found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "405", description = "Method not allowed", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    public ResponseEntity<PetResponse> getPetById(@PathVariable Long id) {
+    public ResponseEntity<PetResponse> getPetById(@PathVariable String id) {
         log.debug("Receiving request to get pet by id: {}", id);
         PetResponse pet = petService.getPetById(id);
         log.debug("Returning pet: {}", pet);
@@ -91,12 +89,13 @@ public class PetController {
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Successfully updated pet"),
         @ApiResponse(responseCode = "400", description = "Invalid request body", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "404", description = "Pet not found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "405", description = "Method not allowed", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "409", description = "Database operation failed", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    public ResponseEntity<PetResponse> updatePet(@PathVariable Long id, @RequestBody @Valid PetRequest petRequest) {
+    public ResponseEntity<PetResponse> updatePet(@PathVariable String id, @RequestBody @Valid PetRequest petRequest) {
         log.debug("Receiving request to update pet with id: {}, details: {}", id, petRequest);
         PetResponse updatedPet = petService.updatePet(id, petRequest);
         log.debug("Pet updated successfully: {}", updatedPet);
@@ -107,11 +106,12 @@ public class PetController {
     @Operation(description = "Delete pet with specified id")
     @ApiResponses({
         @ApiResponse(responseCode = "204", description = "Successfully deleted pet"),
+        @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "404", description = "Pet not found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "405", description = "Method not allowed", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    public ResponseEntity<Void> deletePet(@PathVariable Long id) {
+    public ResponseEntity<Void> deletePet(@PathVariable String id) {
         log.debug("Receiving request to delete pet with id: {}", id);
         petService.deletePet(id);
         log.debug("Pet with id: {} deleted successfully", id);

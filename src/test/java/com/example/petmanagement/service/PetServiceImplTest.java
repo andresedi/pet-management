@@ -76,9 +76,9 @@ class PetServiceImplTest {
     void getPetById_WhenPetExists_ShouldReturnPet() {
         when(petRepository.findById(1L)).thenReturn(Optional.of(pet));
 
-        PetResponse result = petService.getPetById(1L);
+        PetResponse result = petService.getPetById("1");
 
-        assertThat(result.getPetId()).isEqualTo(1L);
+        assertThat(result.getPetId()).isEqualTo("1");
         assertThat(result.getName()).isEqualTo("Fluffy");
         assertThat(result.getSpecies()).isEqualTo("Cat");
         assertThat(result.getAge()).isEqualTo(3);
@@ -89,7 +89,7 @@ class PetServiceImplTest {
     void getPetById_WhenPetNotFound_ShouldThrowException() {
         when(petRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(PetNotFoundException.class, () -> petService.getPetById(1L));
+        assertThrows(PetNotFoundException.class, () -> petService.getPetById("1"));
     }
 
     @Test
@@ -108,13 +108,13 @@ class PetServiceImplTest {
     @Test
     void deletePet_WhenPetExists_ShouldDeletePet() {
         when(petRepository.findById(1L)).thenReturn(Optional.of(pet));
-        petService.deletePet(1L);
+        petService.deletePet("1");
         verify(petRepository).deleteById(1L);
     }
 
     @Test
     void deletePet_WhenPetNotFound_ShouldThrowException() {
         when(petRepository.findById(1L)).thenReturn(Optional.empty());
-        assertThrows(PetNotFoundException.class, () -> petService.deletePet(1L));
+        assertThrows(PetNotFoundException.class, () -> petService.deletePet("1"));
     }
 }

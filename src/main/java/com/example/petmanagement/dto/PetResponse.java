@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class PetResponse {
-    private Long petId;
+    private String petId;
     private String name;
     private String species;
     private int age;

@@ -8,11 +8,11 @@ import org.springframework.data.domain.Pageable;
 public interface PetService {
     PaginatedResponse<PetResponse> getAllPets(Pageable pageable);
 
-    PetResponse getPetById(Long petId);
+    PetResponse getPetById(String petId);
 
     PetResponse createPet(PetRequest petRequest);
 
-    PetResponse updatePet(Long petId, PetRequest petRequest);
+    PetResponse updatePet(String petId, PetRequest petRequest);
 
-    void deletePet(Long petId);
+    void deletePet(String petId);
 }

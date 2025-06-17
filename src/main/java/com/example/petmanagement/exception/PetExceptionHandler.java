@@ -27,4 +27,15 @@ public class PetExceptionHandler {
                 .build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
+
+    @ExceptionHandler(InvalidPetIdException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidPetId(InvalidPetIdException ex) {
+        log.debug("Handling Invalid Pet ID: {}", ex.getMessage());
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .messages(List.of(ex.getMessage()))
+                .reason(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .timestamp(Instant.now())
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
 }

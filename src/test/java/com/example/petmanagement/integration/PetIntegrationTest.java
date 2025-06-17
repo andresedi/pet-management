@@ -96,7 +96,7 @@ class PetIntegrationTest {
                 .andReturn();
 
         // Retrieve created pet
-        Integer petId = JsonPath.read(createResult.getResponse().getContentAsString(), "$.petId");
+        String petId = JsonPath.read(createResult.getResponse().getContentAsString(), "$.petId");
         mockMvc.perform(get("/api/pets/" + petId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Fluffy"))
@@ -114,7 +114,7 @@ class PetIntegrationTest {
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        Integer petId = JsonPath.read(createResult.getResponse().getContentAsString(), "$.petId");
+        String petId = JsonPath.read(createResult.getResponse().getContentAsString(), "$.petId");
 
         // Then update it
         PetRequest updateRequest = PetRequest.builder()
@@ -143,7 +143,7 @@ class PetIntegrationTest {
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        Integer petId = JsonPath.read(createResult.getResponse().getContentAsString(), "$.petId");
+        String petId = JsonPath.read(createResult.getResponse().getContentAsString(), "$.petId");
 
         // Delete pet
         mockMvc.perform(delete("/api/pets/" + petId))

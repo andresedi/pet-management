@@ -5,6 +5,7 @@ import com.example.petmanagement.dto.PetRequest;
 import com.example.petmanagement.dto.PetResponse;
 import com.example.petmanagement.exception.PetNotFoundException;
 import com.example.petmanagement.persistence.model.Pet;
+import com.example.petmanagement.persistence.model.PetIdentifierConverter;
 import com.example.petmanagement.persistence.repository.PetRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,10 +52,11 @@ public class PetServiceImpl implements PetService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = "pets", key = "#petId")
-    public PetResponse getPetById(Long petId) {
-        log.debug("Finding pet by id: {}", petId);
-        PetResponse pet = petRepository.findById(petId).orElseThrow(() -> new PetNotFoundException(petId)).toPetResponseDto();
+    @Cacheable(value = "pets", key = "#id")
+    public PetResponse getPetById(String id) {
+        log.debug("Finding pet by id: {}", id);
+        Long petId = PetIdentifierConverter.of(id).asLong();
+        PetResponse pet = petRepository.findById(petId).orElseThrow(() -> new PetNotFoundException(id)).toPetResponseDto();
         log.debug("Found pet: {}", pet);
         return pet;
     }
@@ -68,9 +70,10 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public PetResponse updatePet(Long petId, PetRequest petRequest) {
-        log.info("Updating pet with id: {}", petId);
-        Pet pet = petRepository.findById(petId).orElseThrow(() -> new PetNotFoundException(petId));
+    public PetResponse updatePet(String id, PetRequest petRequest) {
+        log.info("Updating pet with id: {}", id);
+        Long petId = PetIdentifierConverter.of(id).asLong();
+        Pet pet = petRepository.findById(petId).orElseThrow(() -> new PetNotFoundException(id));
         log.debug("Found pet for update: {}", pet);
         pet.setName(petRequest.getName());
         pet.setSpecies(petRequest.getSpecies());
@@ -82,10 +85,11 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    @CacheEvict(value = "pets", key = "#petId")
-    public void deletePet(Long petId) {
-        log.info("Deleting pet with id: {}", petId);
-        petRepository.findById(petId).orElseThrow(() -> new PetNotFoundException(petId));
+    @CacheEvict(value = "pets", key = "#id")
+    public void deletePet(String id) {
+        log.info("Deleting pet with id: {}", id);
+        Long petId = PetIdentifierConverter.of(id).asLong();
+        petRepository.findById(petId).orElseThrow(() -> new PetNotFoundException(id));
         petRepository.deleteById(petId);
         log.info("Deleted pet with id: {}", petId);
     }

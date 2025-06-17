@@ -24,7 +24,7 @@ public class Pet {
 
     public PetResponse toPetResponseDto() {
         return PetResponse.builder()
-                .petId(this.petId)
+                .petId(String.valueOf(this.petId))
                 .name(this.name)
                 .species(this.species)
                 .age(this.age)
